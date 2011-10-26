@@ -1,0 +1,11 @@
+*.docstates
+*.dotCover
+*.nupkg
+*.suo
+*.user
+TestResult.xml
+
+_ReSharper.*/
+bin/
+obj/
+nuget/

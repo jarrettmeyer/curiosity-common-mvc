@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Curiosity.Common.Mvc</id>
+    <version>$version$</version>
+    <title>Curiosity.Common.Mvc</title>
+    <authors>Jarrett Meyer</authors>
+    <owners>Jarrett Meyer</owners>
+    <projectUrl>https://github.com/jarrettmeyer/curiosity-common-mvc</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Common MVC class library for Curiosity Software, LLC.</description>
+    <copyright>Copyright 2011 Curiosity Software, LLC</copyright>
+    <tags>MVC</tags>
+  </metadata>
+</package>

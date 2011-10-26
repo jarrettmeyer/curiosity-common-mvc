@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  
+  <PropertyGroup>
+    <ExtTasks>$(MSBuildExtensionsPath)\ExtensionPack\4.0\MSBuild.ExtensionPack.tasks</ExtTasks>
+    
+    <Major>1</Major>
+    <Minor>6</Minor>
+    <AssemblyVersion>$(Major).$(Minor).$(Build).$(Revision)</AssemblyVersion>
+    
+    <CurrentDir>$(MSBuildProjectDirectory)</CurrentDir>
+    
+    <ProjDir>$(CurrentDir)\Curiosity.Common.Mvc</ProjDir>
+    <ProjFile>$(ProjDir)\Curiosity.Common.Mvc.csproj</ProjFile>
+    
+    <TestDir>$(CurrentDir)\Curiosity.Common.Mvc.Tests</TestDir>
+    <TestProjFile>$(TestDir)\Curiosity.Common.Mvc.Tests.csproj</TestProjFile>
+
+    
+    <NUnitToolPath>$(CurrentDir)\packages\NUnit.2.5.10.11092\tools</NUnitToolPath>
+  
+  </PropertyGroup>
+  
+  <Import Project="$(ExtTasks)"/>
+
+  <Target Name="Version">
+    <PropertyGroup>
+      <GeneratedAssemblyVersion>1.2.3.4</GeneratedAssemblyVersion>
+      <AssemblyFile>$(ProjDir)\Properties\AssemblyInfo.cs</AssemblyFile>
+    </PropertyGroup>
+    <AssemblyInfo AssemblyInfoFiles="$(AssemblyFile)"
+                  AssemblyCompany="Curiosity Software, LLC"
+                  AssemblyCopyright="© 2011 Curiosity Software, LLC"
+                  AssemblyMajorVersion="$(Major)"
+                  AssemblyFileMajorVersion="$(Major)"
+                  AssemblyMinorVersion="$(Minor)"
+                  AssemblyFileMinorVersion="$(Minor)"
+                  AssemblyBuildNumberType="AutoIncrement"
+                  AssemblyFileBuildNumberType="AutoIncrement">
+      <Output TaskParameter="MaxAssemblyVersion" PropertyName="GeneratedAssemblyVersion"/>
+    </AssemblyInfo>
+    <Message Text="Assembly Version: $(GeneratedAssemblyVersion)"/>
+    <PropertyGroup>
+      <Build>$([System.Version]::new($(GeneratedAssemblyVersion)).Build)</Build>
+    </PropertyGroup>
+    <Message Text="Build: $(Build)" Importance="High"/>
+  </Target>
+
+  <Target Name="BuildDebug">
+    <MSBuild Projects="$(ProjFile)" Properties="Configuration=Debug"/>
+  </Target>
+
+  <Target Name="UnitTests" DependsOnTargets="BuildDebug">
+    <PropertyGroup>
+      <TestAssemblies>$(TestDir)\bin\Debug\Curiosity.Common.Mvc.Tests.dll</TestAssemblies>
+    </PropertyGroup>
+    <MSBuild Projects="$(TestProjFile)" Properties="Configuration=Debug"/>
+    <NUnit Assemblies="$(TestAssemblies)" ToolPath="$(NUnitToolPath)"/>
+  </Target>
+
+  <Target Name="BuildRelease" DependsOnTargets="Version;UnitTests">
+    <MSBuild Projects="$(ProjFile)" Properties="Configuration=Release" />    
+  </Target>
+</Project>
