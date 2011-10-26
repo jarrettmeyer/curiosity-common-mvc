@@ -66,7 +66,7 @@
     <None Include="..\Curiosity.snk">
       <Link>Curiosity.snk</Link>
     </None>
-    <None Include="Curiosity.Common.Mvc.csproj.nuspec" />
+    <None Include="Curiosity.Common.Mvc.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
