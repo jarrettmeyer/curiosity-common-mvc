@@ -58,6 +58,8 @@
     <Compile Include="FlashExtensionsTests.cs" />
     <Compile Include="FlashStorageTests.cs" />
     <Compile Include="HtmlHelperExtensionsTests.cs" />
+    <Compile Include="HttpSessionStateBaseExtensionsTests.cs" />
+    <Compile Include="HttpSessionStateExtensionsTests.cs" />
     <Compile Include="HttpTest.cs" />
     <Compile Include="LinkExtensionsTests.cs" />
     <Compile Include="LowercaseRouteTests.cs" />
