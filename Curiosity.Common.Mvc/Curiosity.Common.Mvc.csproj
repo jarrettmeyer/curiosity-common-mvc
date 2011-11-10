@@ -53,11 +53,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CollectionExtensions.cs" />
+    <Compile Include="DefaultFormHandlerFactory.cs" />
     <Compile Include="FlashExtensions.cs" />
     <Compile Include="FlashStorage.cs" />
+    <Compile Include="FormHandlerFactory.cs" />
+    <Compile Include="FormHandlerBase.cs" />
+    <Compile Include="FormHandlerResult.cs" />
     <Compile Include="HtmlHelperExtensions.cs" />
     <Compile Include="HttpSessionStateBaseExtensions.cs" />
     <Compile Include="HttpSessionStateExtensions.cs" />
+    <Compile Include="IFormHandler.cs" />
+    <Compile Include="IFormHandlerFactory.cs" />
     <Compile Include="LinkExtenstions.cs" />
     <Compile Include="LowercaseRoute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
