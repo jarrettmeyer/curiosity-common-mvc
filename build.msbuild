@@ -5,7 +5,7 @@
     <ExtTasks>$(MSBuildExtensionsPath)\ExtensionPack\4.0\MSBuild.ExtensionPack.tasks</ExtTasks>
     
     <Major>1</Major>
-    <Minor>6</Minor>
+    <Minor>7</Minor>
     <AssemblyVersion>$(Major).$(Minor).$(Build).$(Revision)</AssemblyVersion>
     
     <CurrentDir>$(MSBuildProjectDirectory)</CurrentDir>
