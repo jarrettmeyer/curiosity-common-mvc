@@ -21,5 +21,7 @@ namespace Curiosity.Common.Mvc
             var instance = Activator.CreateInstance(formHandlerType);
             return (IFormHandler)instance;
         }
+
+        
     }
 }

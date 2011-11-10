@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="CollectionExtensions.cs" />
     <Compile Include="DefaultFormHandlerFactory.cs" />
+    <Compile Include="DependencyResolverFormHandlerFactory.cs" />
     <Compile Include="FlashExtensions.cs" />
     <Compile Include="FlashStorage.cs" />
     <Compile Include="FormHandlerBus.cs" />

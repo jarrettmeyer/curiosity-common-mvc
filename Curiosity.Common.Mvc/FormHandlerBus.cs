@@ -114,7 +114,7 @@ namespace Curiosity.Common.Mvc
                 {
                     if (instance == null)
                     {
-                        var factory = new DefaultFormHandlerFactory();
+                        var factory = new DependencyResolverFormHandlerFactory();
                         instance = new FormHandlerBus(factory);
                         AddAllFormHandlers();
                     }
