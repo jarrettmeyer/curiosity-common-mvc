@@ -41,52 +41,66 @@ namespace Curiosity.Common.Mvc
             bool isModelStateValid = IsModelStateValid(context);
             if (!isModelStateValid)
             {
-                if (NotifyOnInvalidModelState)
-                {
-                    WriteFlashWarning(context.Controller.TempData, "");
-                }
-                ExecuteFailureResult(context);
+                HandleOnInvalidModelState(context);
                 return;
             }
+            HandleForm(context);
+        }
+
+        private void HandleForm(ControllerContext context)
+        {
             try
             {
-                var formHandler = GetFormHandler();
-                formHandler.Handle(Form);
+                FormHandlerBus.Instance.SendForm(Form);
                 ExecuteSuccessResult(context);
             }
             catch (ApplicationException ex)
             {
-                if (NotifyOnApplicationException)
-                {
-                    WriteFlashWarning(context.Controller.TempData, ex.Message);
-                }
-                ExecuteFailureResult(context);
+                HandleOnApplicationException(context, ex);
             }
             catch (Exception ex)
             {
-                if (NotifyOnError)
-                {
-                    WriteFlashError(context.Controller.TempData, ex.Message);
-                }
-                ExecuteFailureResult(context);
+                HandleOnException(context, ex);
             }
+        }
+
+        private void HandleOnApplicationException(ControllerContext context, ApplicationException exception)
+        {
+            if (NotifyOnApplicationException)
+            {
+                WriteFlashWarning(context.Controller.TempData, exception.Message);
+            }
+            ExecuteFailureResult(context);
+        }
+
+        private void HandleOnInvalidModelState(ControllerContext context)
+        {
+            if (NotifyOnInvalidModelState)
+            {
+                WriteFlashWarning(context.Controller.TempData, InvalidModelStateNotification);
+            }
+            ExecuteFailureResult(context);
+        }
+
+        private void HandleOnException(ControllerContext context, Exception exception)
+        {
+            if (NotifyOnError)
+            {
+                WriteFlashError(context.Controller.TempData, exception.Message);
+            }
+            ExecuteFailureResult(context);
         }
 
         private void ExecuteFailureResult(ControllerContext context)
         {
-            Failure.Invoke().ExecuteResult(context);
+            ActionResult failureResult = Failure.Invoke() ?? new EmptyResult();
+            failureResult.ExecuteResult(context);
         }
 
         private void ExecuteSuccessResult(ControllerContext context)
         {
-            Success.Invoke().ExecuteResult(context);
-        }
-
-        private static IFormHandler GetFormHandler()
-        {
-            var factory = FormHandlerFactory.Instance;            
-            var formHandler = factory.Create(typeof(FORM));
-            return formHandler;
+            ActionResult successResult = Success.Invoke() ?? new EmptyResult();
+            successResult.ExecuteResult(context);
         }
 
         [DebuggerStepThrough]

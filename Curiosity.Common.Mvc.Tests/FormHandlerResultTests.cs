@@ -1,120 +1,118 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using System.Web.Routing;
 using NUnit.Framework;
 
 namespace Curiosity.Common.Mvc
 {
+    [TestFixture]
     public class FormHandlerResultTests
     {
-        [TestFixture]
-        public class When_Passing_Null_Form_To_FormHandlerResult
+        private ControllerContext context;
+        private TestForm form;
+        private FormHandlerResult<TestForm> formHandlerResult;
+        private TestResult success;
+        private TestResult failure;
+
+        [SetUp]
+        public virtual void BeforeEachTest()
         {
-            [Test]
-            public void Should_Throw_Exception()
-            {
-                TestForm form = null;
-                Assert.Throws<ArgumentNullException>(() => new FormHandlerResult<TestForm>(form, () => new EmptyResult(), () => new EmptyResult()));
-            }
+            form = new TestForm();
+            success = new TestResult();
+            failure = new TestResult();
+
+            formHandlerResult = new FormHandlerResult<TestForm>(form, () => success, () => failure);
+
+            var requestContext = new RequestContext();
+            var controller = new TestController();
+            context = new ControllerContext(requestContext, controller);
+
+            FormHandlerBus.Instance.ClearFormHandlerTypes();
         }
 
-        [TestFixture]
-        public class When_Executing_FormHandlerResult : FormHandlerResult_Test
+        [Test]
+        public void Throws_Exception_When_Creating_With_Null_Form()
         {
-            [TestFixtureSetUp]
-            public void BeforeAllTests()
-            {
-                FormHandlerFactory.Instance.Add(typeof(TestFormHandler));
-            }
-
-            [SetUp]
-            public override void BeforeEachTest()
-            {
-                base.BeforeEachTest();
-            }
-
-            [Test]
-            public void Should_Execute_Failure_When_Model_State_Is_Invalid()
-            {
-                context.Controller.ViewData.ModelState.AddModelError("*", "Something is wrong!");
-                formHandlerResult.ExecuteResult(context);
-                Assert.IsTrue(failure.IsExecuted);
-            }
-
-            [Test]
-            public void Should_Execute_Success_Result()
-            {
-                formHandlerResult.ExecuteResult(context);                
-                Assert.IsTrue(success.IsExecuted);
-            }
+            formHandlerResult = new FormHandlerResult<TestForm>(form, () => success, () => failure);
         }
 
-        [TestFixture]
-        public class When_Form_Handler_Throws_Application_Exception : FormHandlerResult_Test
+        [Test]
+        public void Sets_Success_To_EmptyResult_When_Given_Null_Value()
         {
-            [TestFixtureSetUp]
-            public void BeforeAllTests()
-            {
-                FormHandlerFactory.Instance.Add(typeof(ApplicationExceptionThrowingFormHandler));
-            }
-
-            [SetUp]
-            public override void BeforeEachTest()
-            {
-                base.BeforeEachTest();
-            }
-
-            [Test]
-            public void Should_Execute_Failure_Result()
-            {
-                formHandlerResult.ExecuteResult(context);
-                Assert.IsTrue(failure.IsExecuted);
-            }
+            formHandlerResult = new FormHandlerResult<TestForm>(form, null, () => failure);
+            Assert.IsNotNull(formHandlerResult.Success);
+            Assert.IsInstanceOf<EmptyResult>(formHandlerResult.Success.Invoke());
         }
 
-        [TestFixture]
-        public class When_Form_Handler_Throws_Exception : FormHandlerResult_Test
+        [Test]
+        public void Sets_Failure_To_EmptyResult_When_Given_Null_Value()
         {
-            [TestFixtureSetUp]
-            public void BeforeAllTests()
-            {
-                FormHandlerFactory.Instance.Add(typeof(ExceptionThrowingFormHandler));
-            }
-
-            [SetUp]
-            public override void BeforeEachTest()
-            {
-                base.BeforeEachTest();
-            }
-
-            [Test]
-            public void Should_Execute_Failure_Result()
-            {
-                formHandlerResult.ExecuteResult(context);
-                Assert.IsTrue(failure.IsExecuted);
-            }
+            formHandlerResult = new FormHandlerResult<TestForm>(form, () => success, null);
+            Assert.IsNotNull(formHandlerResult.Failure);
+            Assert.IsInstanceOf<EmptyResult>(formHandlerResult.Failure.Invoke());
         }
 
-        public class FormHandlerResult_Test
+        [Test]
+        public void Should_Execute_Failure_When_Model_State_Is_Invalid()
         {
-            protected ControllerContext context;
-            protected TestForm form;
-            protected FormHandlerResult<TestForm> formHandlerResult;
-            protected TestResult success;
-            protected TestResult failure;
+            context.Controller.ViewData.ModelState.AddModelError("*", "Something is wrong!");
+            formHandlerResult.ExecuteResult(context);
+            Assert.IsTrue(failure.IsExecuted);
+        }
 
-            public virtual void BeforeEachTest()
-            {
-                form = new TestForm();
-                success = new TestResult();
-                failure = new TestResult();
+        [Test]
+        public void Should_Execute_Success_Result()
+        {
+            formHandlerResult.ExecuteResult(context);
+            Assert.IsTrue(success.IsExecuted);
+        }
+        
+        [Test]
+        public void Should_Execute_Failure_Result_When_Form_Handler_Throws_Application_Exception()
+        {
+            FormHandlerBus.Instance.AddFormHandlerType(typeof(ApplicationExceptionThrowingFormHandler));
+            formHandlerResult.ExecuteResult(context);
+            Assert.IsTrue(failure.IsExecuted);
+        }
 
-                formHandlerResult = new FormHandlerResult<TestForm>(form, () => success, () => failure);
+        [Test]
+        public void Should_Execute_Failure_Result_When_Form_Handler_Throws_Exception()
+        {
+            FormHandlerBus.Instance.AddFormHandlerType(typeof(ExceptionThrowingFormHandler));
+            formHandlerResult.ExecuteResult(context);
+            Assert.IsTrue(failure.IsExecuted);
+        }
 
-                var requestContext = new RequestContext();
-                var controller = new TestController();
-                context = new ControllerContext(requestContext, controller);                
-            }
+        [Test]
+        public void Should_Add_Error_Message_To_Flash_When_Form_Handler_Throws_Exception()
+        {
+            FormHandlerBus.Instance.AddFormHandlerType(typeof(ExceptionThrowingFormHandler));
+            formHandlerResult.ExecuteResult(context);
+            var flashTempData = context.Controller.TempData[typeof(FlashStorage).FullName];
+            var flash = (IEnumerable<KeyValuePair<string, string>>)flashTempData;
+            Assert.IsTrue(flash.Any(m => m.Key == "error"));
+        }
+
+        [Test]
+        public void Should_Add_Warning_Message_To_Flash_When_Form_Handler_Throws_Application_Exception()
+        {
+            FormHandlerBus.Instance.AddFormHandlerType(typeof(ApplicationExceptionThrowingFormHandler));
+            formHandlerResult.ExecuteResult(context);
+            var flashTempData = context.Controller.TempData[typeof(FlashStorage).FullName];
+            var flash = (IEnumerable<KeyValuePair<string, string>>)flashTempData;
+            Assert.IsTrue(flash.Any(m => m.Key == "warning"));
+        }
+
+        [Test]
+        public void Should_Add_Warning_Message_To_Flash_When_Form_Is_Invalid()
+        {
+            context.Controller.ViewData.ModelState.AddModelError("*", "Something bad happened!");
+            formHandlerResult.ExecuteResult(context);
+            var flashTempData = context.Controller.TempData[typeof(FlashStorage).FullName];
+            var flash = (IEnumerable<KeyValuePair<string, string>>)flashTempData;
+            Assert.IsTrue(flash.Any(m => m.Key == "warning"));
         }
 
         public class TestForm { }

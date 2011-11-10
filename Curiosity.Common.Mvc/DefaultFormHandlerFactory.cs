@@ -1,37 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Curiosity.Common.Reflection;
 
 namespace Curiosity.Common.Mvc
 {
-    public class DefaultFormHandlerFactory : List<Type>, IFormHandlerFactory
+    public class DefaultFormHandlerFactory : IFormHandlerFactory
     {
-        public new void Add(Type type)
-        {
-            bool isFormHandler = type.IsImplementationOf(typeof(IFormHandler));
-            if (!isFormHandler)
-            {
-                throw new ArgumentException(string.Format("Unable to add type '{0}' because it is not a form handler implementation.", type));
-            }
-            base.Add(type);
-        }
-
         /// <summary>
         /// Create a new instance of the requested form handler.
         /// </summary>
-        /// <param name="type">Type of form handler to create</param>
-        public IFormHandler Create(Type type)
+        /// <param name="formHandlerType">Type of form handler to create</param>
+        public virtual IFormHandler CreateFormHandler(Type formHandlerType)
         {
-            var typeToInstance = GetImplementationOf(type);
-            return (IFormHandler)Activator.CreateInstance(typeToInstance);
-        }
-
-        private Type GetImplementationOf(Type type)
-        {
-            var handlerType = typeof(IFormHandler<>).MakeGenericType(type);
-            var matchingType = this.Single(t => !t.IsInterface && !t.IsAbstract && t.IsImplementationOf(handlerType));
-            return matchingType;
+            if (formHandlerType == null)
+            {
+                throw new ArgumentNullException("formHandlerType");
+            }
+            if (formHandlerType.GetInterface(typeof(IFormHandler).Name) == null)
+            {
+                throw new ArgumentException(string.Format("Requested form handler type {0} does not implement IFormHandler.", formHandlerType.Name), "formHandlerType");
+            }
+            var instance = Activator.CreateInstance(formHandlerType);
+            return (IFormHandler)instance;
         }
     }
 }

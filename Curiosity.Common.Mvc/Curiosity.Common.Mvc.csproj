@@ -56,13 +56,14 @@
     <Compile Include="DefaultFormHandlerFactory.cs" />
     <Compile Include="FlashExtensions.cs" />
     <Compile Include="FlashStorage.cs" />
-    <Compile Include="FormHandlerFactory.cs" />
+    <Compile Include="FormHandlerBus.cs" />
     <Compile Include="FormHandlerBase.cs" />
     <Compile Include="FormHandlerResult.cs" />
     <Compile Include="HtmlHelperExtensions.cs" />
     <Compile Include="HttpSessionStateBaseExtensions.cs" />
     <Compile Include="HttpSessionStateExtensions.cs" />
     <Compile Include="IFormHandler.cs" />
+    <Compile Include="IFormHandlerBus.cs" />
     <Compile Include="IFormHandlerFactory.cs" />
     <Compile Include="LinkExtenstions.cs" />
     <Compile Include="LowercaseRoute.cs" />

@@ -58,7 +58,7 @@
     <Compile Include="FlashExtensionsTests.cs" />
     <Compile Include="FlashStorageTests.cs" />
     <Compile Include="FormHandlerBaseTests.cs" />
-    <Compile Include="FormHandlerFactoryTests.cs" />
+    <Compile Include="FormHandlerBusTests.cs" />
     <Compile Include="FormHandlerResultTests.cs" />
     <Compile Include="HtmlHelperExtensionsTests.cs" />
     <Compile Include="HttpSessionStateBaseExtensionsTests.cs" />
