@@ -18,8 +18,10 @@ namespace Curiosity.Common.Mvc
             NotifyOnApplicationException = true;
             NotifyOnError = true;
             NotifyOnInvalidModelState = true;
+            NotifyOnSuccess = true;
 
             InvalidModelStateNotification = "Please correct the errors with the form.";
+            SuccessNotification = null;
         }
 
         public FORM Form { get; private set; }
@@ -28,13 +30,35 @@ namespace Curiosity.Common.Mvc
 
         public Func<ActionResult> Success { get; private set; }
 
+        /// <summary>
+        /// Should a flash warning message be shown when an application exception is thrown?
+        /// </summary>
         public bool NotifyOnApplicationException { get; set; }
 
+        /// <summary>
+        /// Should a flash error message be shown when an exception is thrown?
+        /// </summary>
         public bool NotifyOnError { get; set; }
 
+        /// <summary>
+        /// Should a flash warning message be shown when the model state is invalid?
+        /// </summary>
         public bool NotifyOnInvalidModelState { get; set; }
 
+        /// <summary>
+        /// Should a flash notification message be shown on success?
+        /// </summary>
+        public bool NotifyOnSuccess { get; set; }
+
+        /// <summary>
+        /// Notification message to show when the model state is invalid.
+        /// </summary>
         public string InvalidModelStateNotification { get; set; }
+
+        /// <summary>
+        /// Success message to show when the form handler is successful.
+        /// </summary>
+        public string SuccessNotification { get; set; }
 
         public override void ExecuteResult(ControllerContext context)
         {
@@ -51,8 +75,8 @@ namespace Curiosity.Common.Mvc
         {
             try
             {
-                FormHandlerBus.Instance.SendForm(Form);
-                ExecuteSuccessResult(context);
+                FormHandlerBus.Instance.SendForm(Form);                
+                HandleOnSuccess(context);
             }
             catch (ApplicationException ex)
             {
@@ -91,6 +115,15 @@ namespace Curiosity.Common.Mvc
             ExecuteFailureResult(context);
         }
 
+        private void HandleOnSuccess(ControllerContext context)
+        {
+            if (NotifyOnSuccess && !string.IsNullOrEmpty(SuccessNotification))
+            {
+                WriteFlashSuccess(context.Controller.TempData, SuccessNotification);
+            }
+            ExecuteSuccessResult(context);
+        }
+
         private void ExecuteFailureResult(ControllerContext context)
         {
             ActionResult failureResult = Failure.Invoke() ?? new EmptyResult();
@@ -117,6 +150,11 @@ namespace Curiosity.Common.Mvc
         private static void WriteFlashError(TempDataDictionary tempData, string message)
         {
             tempData.Flash(new { error = message });
+        }
+
+        private static void WriteFlashSuccess(TempDataDictionary tempData, string message)
+        {
+            tempData.Flash(new { success = message });
         }
 
         private static void WriteFlashWarning(TempDataDictionary tempData, string message)

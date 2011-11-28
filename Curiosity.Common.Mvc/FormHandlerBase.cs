@@ -29,7 +29,7 @@ namespace Curiosity.Common.Mvc
             }
             catch (ArgumentNullException ex)
             {
-                Debug.WriteLine(ex.Message);                
+                Debug.WriteLine(ex.Message);
             }
             catch (InvalidCastException)
             {

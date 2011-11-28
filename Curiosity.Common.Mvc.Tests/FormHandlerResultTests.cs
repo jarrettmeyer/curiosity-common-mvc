@@ -96,6 +96,17 @@ namespace Curiosity.Common.Mvc
         }
 
         [Test]
+        public void Should_Add_Success_Message_When_Successful()
+        {
+            formHandlerResult.SuccessNotification = "Form was successfully submitted";
+            FormHandlerBus.Instance.AddFormHandlerType(typeof(TestFormHandler));
+            formHandlerResult.ExecuteResult(context);
+            var flashTempData = context.Controller.TempData[typeof(FlashStorage).FullName];
+            var flash = (IEnumerable<KeyValuePair<string, string>>)flashTempData;
+            Assert.IsTrue(flash.Any(m => m.Key == "success"));
+        }
+
+        [Test]
         public void Should_Add_Warning_Message_To_Flash_When_Form_Handler_Throws_Application_Exception()
         {
             FormHandlerBus.Instance.AddFormHandlerType(typeof(ApplicationExceptionThrowingFormHandler));
