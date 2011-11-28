@@ -20,7 +20,7 @@ namespace Curiosity.Common.Mvc
             NotifyOnInvalidModelState = true;
             NotifyOnSuccess = true;
 
-            InvalidModelStateNotification = "Please correct the errors with the form.";
+            InvalidModelStateNotification = () => "Please correct the errors with the form.";
             SuccessNotification = null;
         }
 
@@ -53,12 +53,12 @@ namespace Curiosity.Common.Mvc
         /// <summary>
         /// Notification message to show when the model state is invalid.
         /// </summary>
-        public string InvalidModelStateNotification { get; set; }
+        public Func<string> InvalidModelStateNotification { get; set; }
 
         /// <summary>
         /// Success message to show when the form handler is successful.
         /// </summary>
-        public string SuccessNotification { get; set; }
+        public Func<string> SuccessNotification { get; set; }
 
         public override void ExecuteResult(ControllerContext context)
         {
@@ -99,9 +99,9 @@ namespace Curiosity.Common.Mvc
 
         private void HandleOnInvalidModelState(ControllerContext context)
         {
-            if (NotifyOnInvalidModelState)
+            if (NotifyOnInvalidModelState && InvalidModelStateNotification != null)
             {
-                WriteFlashWarning(context.Controller.TempData, InvalidModelStateNotification);
+                WriteFlashWarning(context.Controller.TempData, InvalidModelStateNotification());
             }
             ExecuteFailureResult(context);
         }
@@ -117,9 +117,9 @@ namespace Curiosity.Common.Mvc
 
         private void HandleOnSuccess(ControllerContext context)
         {
-            if (NotifyOnSuccess && !string.IsNullOrEmpty(SuccessNotification))
+            if (NotifyOnSuccess && SuccessNotification != null)
             {
-                WriteFlashSuccess(context.Controller.TempData, SuccessNotification);
+                WriteFlashSuccess(context.Controller.TempData, SuccessNotification());
             }
             ExecuteSuccessResult(context);
         }
