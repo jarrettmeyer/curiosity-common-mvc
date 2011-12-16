@@ -6,6 +6,10 @@ This library is available as a NuGet package. Check out its [NuGet gallery page]
 
 ## ChangeLog
 
-### 1.7 (currently under development)
+### 1.8
+
+* Added classes to support request form logging ([read more](https://github.com/jarrettmeyer/curiosity-common-mvc/wiki/Request-Form-Logging))
+
+### 1.7 
 
 * Added classes to support Form Handlers ([read more](https://github.com/jarrettmeyer/curiosity-common-mvc/wiki/Form-Handlers))
