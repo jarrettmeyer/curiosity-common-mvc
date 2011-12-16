@@ -9,5 +9,13 @@ namespace SampleMvcApp.Models
 
         [Required]
         public string LastName { get; set; }
+
+        public int[] MyList { get; set; }
+
+        public string Password { get; set; }
+
+        public string PasswordConfirmation { get; set; }
+
+        public string SSN { get; set; }
     }
 }

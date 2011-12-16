@@ -1,0 +1,42 @@
+﻿@model SampleMvcApp.Models.SampleForm
+
+@{
+    ViewBag.Title = "TestForm";
+}
+
+<h2>TestForm</h2>
+
+@using (Html.BeginForm())
+{
+    <p>
+        <label>First Name</label>
+        @Html.TextBoxFor(x => x.FirstName)
+    </p>
+    <p>
+        <label>Last Name</label>
+        @Html.TextBoxFor(x => x.LastName)
+    </p>
+    <p>
+        <label>Password</label>
+        @Html.PasswordFor(x => x.Password)
+    </p>
+    <p>
+        <label>Password Confirmation</label>
+        @Html.PasswordFor(x => x.PasswordConfirmation)
+    </p>
+    <p>
+        <label>SSN</label>
+        @Html.TextBoxFor(x => x.SSN)
+    </p>
+    <p>
+        <label>Check All Appropriate</label>
+        <input type="checkbox" name="MyList" value="1"/>
+        <input type="checkbox" name="MyList" value="2"/>
+        <input type="checkbox" name="MyList" value="3"/>
+        <input type="checkbox" name="MyList" value="4"/>
+        <input type="checkbox" name="MyList" value="5"/>
+    </p>
+    <p>
+        <button type="submit">Submit Form</button>
+    </p>
+}

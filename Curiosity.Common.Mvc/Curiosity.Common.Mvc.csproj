@@ -37,10 +37,12 @@
     <AssemblyOriginatorKeyFile>..\Curiosity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Curiosity.Common">
-      <HintPath>..\packages\Curiosity.Common.1.6.54\lib\net40\Curiosity.Common.dll</HintPath>
+    <Reference Include="Curiosity.Common, Version=1.7.59.0, Culture=neutral, PublicKeyToken=fdc25e90fcbc022c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Curiosity.Common.1.7.59\lib\net40\Curiosity.Common.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -53,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CollectionExtensions.cs" />
+    <Compile Include="DebugLogRequestFormMessageObserver.cs" />
     <Compile Include="DefaultFormHandlerFactory.cs" />
     <Compile Include="DependencyResolverFormHandlerFactory.cs" />
     <Compile Include="FlashExtensions.cs" />
@@ -67,7 +70,11 @@
     <Compile Include="IFormHandlerBus.cs" />
     <Compile Include="IFormHandlerFactory.cs" />
     <Compile Include="LinkExtenstions.cs" />
+    <Compile Include="LogRequestFormAttribute.cs" />
+    <Compile Include="LogRequestFormMessage.cs" />
+    <Compile Include="LogRequestFormMessageExtensions.cs" />
     <Compile Include="LowercaseRoute.cs" />
+    <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteCollectionExtensions.cs" />
     <Compile Include="StringExtensions.cs" />
@@ -76,6 +83,7 @@
     <None Include="..\Curiosity.snk">
       <Link>Curiosity.snk</Link>
     </None>
+    <None Include="app.config" />
     <None Include="Curiosity.Common.Mvc.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
