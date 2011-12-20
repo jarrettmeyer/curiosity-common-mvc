@@ -34,3 +34,5 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.8.17.0")]
 [assembly: AssemblyFileVersion("1.8.17.0")]
+
+[assembly: InternalsVisibleTo("Curiosity.Common.Mvc.Tests, PublicKey=0024000004800000940000000602000000240000525341310004000001000100bbc352697b97358fdb587789e2aa0e10773e85828106f06da0588297b02fa155fc7c4c0503b9f96e5452c0d8fed5516bab98a3f9f6b501dd95b768b6ca608e2bb5f57f2e0150461ad781707cfe32e8503bf2ca6bfc1daea453cadc29763d1a209153601bb495479fa38b7dc5ed8a5b35b6779c5949efb192944f714262cd34dc")]

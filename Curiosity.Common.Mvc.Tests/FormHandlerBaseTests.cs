@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 
 namespace Curiosity.Common.Mvc
 {
@@ -44,17 +45,17 @@ namespace Curiosity.Common.Mvc
             }
 
             [Test]
-            public void Does_Not_Throw_Exception_When_Form_Is_Null()
+            public void throws_exception_when_form_is_null()
             {
                 form = null;
-                Assert.DoesNotThrow(() => formHandler.Handle(form));
+                Assert.Throws<ArgumentNullException>(() => formHandler.Handle(form));
             }
 
             [Test]
-            public void Does_Not_Throw_Exception_When_Form_Is_Wrong_Type()
+            public void throws_exception_when_form_is_wrong_type()
             {
                 form = new OtherTestForm();
-                Assert.DoesNotThrow(() => formHandler.Handle(form));
+                Assert.Throws<InvalidCastException>(() => formHandler.Handle(form));
             }
         }
 

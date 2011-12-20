@@ -14,7 +14,7 @@ namespace Curiosity.Common.Mvc
         
         public LogRequestFormMessage(ControllerContext context)
         {
-            context.ThrowIfArgumentIsNull("context");
+            context.ThrowIfArgumentIsNull("context", "Unable to create log request form message. No controller context is given.");
             this.context = context;            
         }
 

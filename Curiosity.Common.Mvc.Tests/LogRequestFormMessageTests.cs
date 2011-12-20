@@ -1,4 +1,5 @@
 ﻿using System.Collections.Specialized;
+using System.Configuration;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -38,6 +39,14 @@ namespace Curiosity.Common.Mvc
             context.RequestContext = new RequestContext(httpContext.Object, routeData);
 
             message = new LogRequestFormMessage(context);
+        }
+
+        [Test]
+        public void can_configure_protected_fields()
+        {
+            LogRequestFormAttribute.GetConfigProtectedFormFieldsMethod = () => "MyProtectedField";
+            bool result = message.IsProtected("MyProtectedField");
+            Assert.IsTrue(result);
         }
 
         [Test]

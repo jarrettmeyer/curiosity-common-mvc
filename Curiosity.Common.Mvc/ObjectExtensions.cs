@@ -9,5 +9,11 @@ namespace Curiosity.Common.Mvc
             if (obj == null)
                 throw new ArgumentNullException(argumentName);
         }
+
+        internal static void ThrowIfArgumentIsNull(this object obj, string argumentName, string message)
+        {
+            if (obj == null)
+                throw new ArgumentNullException(argumentName, message);
+        }
     }
 }

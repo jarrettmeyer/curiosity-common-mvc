@@ -5,7 +5,7 @@ namespace Curiosity.Common.Mvc
 {
     /// <summary>
     /// As an observer, this will make no changes to the message. It will simply log
-    /// the form data to the debug window.
+    /// the form data to the debug window. Useful for debugging.
     /// </summary>
     public class DebugLogRequestFormMessageObserver : MessageHandlerBase<LogRequestFormMessage>
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Curiosity.Common.Messaging;
@@ -10,7 +11,9 @@ namespace Curiosity.Common.Mvc
     public class LogRequestFormAttribute : ActionFilterAttribute
     {
         private static readonly string[] defaultProtectedFields = new[] { "CreditCard", "CreditCardNumber", "NewPassword", "NewPasswordConfirmation", "Password", "PasswordConfirmation" };
-        private static string[] protectedFields;
+        private static Func<string> getConfigProtectedFormFieldsMethod = () => ConfigurationManager.AppSettings["ProtectedFormFields"];
+        private static readonly object lockObject = new object();
+        private static volatile List<string> protectedFields;
 
         static LogRequestFormAttribute()
         {
@@ -18,11 +21,24 @@ namespace Curiosity.Common.Mvc
         }
 
         /// <summary>
+        /// Allows for testing the configuration endpoint.
+        /// </summary>
+        internal static Func<string> GetConfigProtectedFormFieldsMethod
+        {
+            get { return getConfigProtectedFormFieldsMethod; }
+            set { getConfigProtectedFormFieldsMethod = value; }
+        }
+
+        /// <summary>
         /// Gets the list of protected form fields.
         /// </summary>
         public static IEnumerable<string> ProtectedFormFields
         {
-            get { return protectedFields ?? (protectedFields = ConfigProtectedFormFields.Union(defaultProtectedFields).Distinct().ToArray()); }
+            get
+            {
+                InitializeProtectedFieldsCollection();
+                return protectedFields;
+            }
         }
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -30,17 +46,34 @@ namespace Curiosity.Common.Mvc
             Bus.Instance.Send(new LogRequestFormMessage(filterContext));
         }
 
-        private static IEnumerable<string> ConfigProtectedFormFields
+        private static void InitializeProtectedFieldsCollection()
         {
-            get
+            if (protectedFields == null)
             {
-                string protectedFormFieldsString = ConfigurationManager.AppSettings["ProtectedFormFields"];
-                if (string.IsNullOrEmpty(protectedFormFieldsString)) return new string[] { };
-                var protectedFormFields = protectedFormFieldsString
-                    .Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries)                    
-                    .Select(s => s.Trim());
-                return protectedFormFields;
+                lock (lockObject)
+                {
+                    if (protectedFields == null)
+                    {
+                        var innerList = new List<string>();
+                        innerList.AddRange(defaultProtectedFields);
+                        innerList.AddRange(GetConfigProtectedFormFields());
+                        protectedFields = innerList.Distinct().ToList();
+                    }
+                }
             }
+        }
+
+        private static IEnumerable<string> GetConfigProtectedFormFields()
+        {
+            string protectedFormFieldsString = getConfigProtectedFormFieldsMethod();
+            Debug.WriteLine("Configured protected form fields: " + protectedFormFieldsString);
+
+            if (string.IsNullOrEmpty(protectedFormFieldsString)) return new string[] { };
+            
+            var protectedFormFields = protectedFormFieldsString
+                .Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(s => s.Trim());
+            return protectedFormFields;
         }
     }
 }
