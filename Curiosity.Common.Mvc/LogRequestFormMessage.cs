@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
@@ -7,13 +8,13 @@ using Curiosity.Common.Messaging;
 
 namespace Curiosity.Common.Mvc
 {
-    public class LogRequestFormMessage : EventMessageBase
+    public class LogRequestFormMessage : EventMessageBase, IEnumerable<KeyValuePair<string, string>>
     {
         private readonly ControllerContext context;
         
         public LogRequestFormMessage(ControllerContext context)
         {
-            context.ThrowIfArgumentIsNull("context");
+            context.ThrowIfArgumentIsNull("context", "Unable to create log request form message. No controller context is given.");
             this.context = context;            
         }
 
@@ -36,7 +37,7 @@ namespace Curiosity.Common.Mvc
         /// <summary>
         /// Gets the form data submitted with the request.
         /// </summary>
-        public NameValueCollection FormData
+        private NameValueCollection FormData
         {
             get { return context.HttpContext.Request.Form; }
         }
@@ -47,6 +48,11 @@ namespace Curiosity.Common.Mvc
         public bool HasFormData
         {
             get { return FormData != null && FormData.Count > 0; }
+        }
+
+        public string[] Keys
+        {
+            get { return FormData.AllKeys; }
         }
 
         /// <summary>
@@ -65,6 +71,11 @@ namespace Curiosity.Common.Mvc
             get { return context.HttpContext.Request.RawUrl; }
         }
 
+        public string this[string key]
+        {
+            get { return GetFormValue(key); }
+        }
+
         /// <summary>
         /// Is the given field protected?
         /// </summary>
@@ -73,22 +84,41 @@ namespace Curiosity.Common.Mvc
             return ProtectedFormFields.Contains(key);
         }
 
+        public IEnumerator<KeyValuePair<string, string>> GetEnumerator()
+        {
+            foreach (string key in Keys)
+            {
+                yield return new KeyValuePair<string, string>(key, this[key]);
+            }
+        }
+
         public override string ToString()
         {
             var sb = new StringBuilder();
             sb.AppendLine(string.Format("Url: {0}, Controller: {1}, Action: {2}", Url, ControllerName, ActionName));
-            var keyStrings = new List<string>();
-            foreach (string key in FormData.AllKeys)
-            {
-                var value = GetFormValue(key);
-                var keyString = string.Format("{0}: {1}", key, value);
-                keyStrings.Add(keyString);
-            }
-            sb.AppendLine(string.Join(", ", keyStrings));
+            string formDataString = BuildFormDataString();
+            sb.AppendLine(formDataString);
             return sb.ToString();
         }
 
-        internal string GetFormValue(string key)
+        private string BuildFormDataString()
+        {
+            var formDataStringParts = new List<string>();
+            foreach (string key in Keys)
+            {
+                var value = this[key];
+                var stringPart = string.Format("{0}: {1}", key, value);
+                formDataStringParts.Add(stringPart);
+            }            
+            return string.Join(", ", formDataStringParts);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        private string GetFormValue(string key)
         {
             string value;
             if (IsProtected(key))

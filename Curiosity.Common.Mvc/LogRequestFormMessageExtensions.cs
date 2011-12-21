@@ -14,9 +14,9 @@ namespace Curiosity.Common.Mvc
             root.Add(new XElement("Controller", message.ControllerName));
             root.Add(new XElement("Action", message.ActionName));
             var formData = new XElement("FormData");
-            foreach (var key in message.FormData.AllKeys)
+            foreach (var key in message.Keys)
             {
-                var value = message.GetFormValue(key);
+                var value = message[key];
                 formData.Add(new XElement(key, value));
             }
             root.Add(formData);

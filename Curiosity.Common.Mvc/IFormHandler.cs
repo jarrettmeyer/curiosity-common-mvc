@@ -26,6 +26,10 @@ namespace Curiosity.Common.Mvc
     /// <typeparam name="FORM">Type of form</typeparam>
     public interface IFormHandler<in FORM> : IFormHandler
     {
+        /// <summary>
+        /// Handle the given form.
+        /// </summary>
+        /// <param name="form">Form to be handled</param>
         void Handle(FORM form);
     }
 }

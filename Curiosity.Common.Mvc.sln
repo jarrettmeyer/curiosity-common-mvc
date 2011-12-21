@@ -8,9 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C530F365-BFF2-4630-B82D-5F9C8048586D}"
 	ProjectSection(SolutionItems) = preProject
 		build.msbuild = build.msbuild
-		build_release.cmd = build_release.cmd
 		publish.cmd = publish.cmd
-		run_tests.cmd = run_tests.cmd
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleMvcApp", "SampleMvcApp\SampleMvcApp.csproj", "{2F997A4C-2AE8-4CD4-8EB1-0864419BD1F1}"
