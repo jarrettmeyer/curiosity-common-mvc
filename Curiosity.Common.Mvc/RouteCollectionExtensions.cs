@@ -30,5 +30,32 @@ namespace Curiosity.Common.Mvc
 
             return route;
         }
+
+        public static Route MapLowercaseRoute(this AreaRegistrationContext context, string name, string url, object defaults)
+        {
+            return context.MapLowercaseRoute(name, url, defaults, null);
+        }
+
+        public static Route MapLowercaseRoute(this AreaRegistrationContext context, string name, string url, object defaults, object constraints)
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+            if (url == null)
+                throw new ArgumentNullException("url");
+
+
+            Route route = new LowercaseRoute(url, new MvcRouteHandler())
+            {
+                Defaults = new RouteValueDictionary(defaults),
+                Constraints = new RouteValueDictionary(constraints),
+                DataTokens = new RouteValueDictionary(),
+            };
+
+            context.Routes.Add(route);
+            route.DataTokens["area"] = context.AreaName;
+            route.DataTokens["UseNamespaceFallback"] = true;
+
+            return route;
+        }
     }
 }
