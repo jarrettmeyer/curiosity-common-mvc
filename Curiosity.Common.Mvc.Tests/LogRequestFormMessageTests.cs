@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Curiosity.Common.Messaging;
 using Moq;
 using NUnit.Framework;
 
@@ -16,6 +17,18 @@ namespace Curiosity.Common.Mvc
         private Mock<HttpContextBase> httpContext;
         private LogRequestFormMessage message;
         private Mock<HttpRequestBase> request;
+
+        public class TypeTests
+        {
+            [Test]
+            public void should_inherit_from_MessageBase()
+            {
+                var type = typeof(LogRequestFormMessage);
+                var superType = typeof(MessageBase);
+                bool result = type.IsSubclassOf(superType);
+                Assert.IsTrue(result);
+            }
+        }
 
             
         [SetUp]
