@@ -17,7 +17,9 @@ namespace Curiosity.Common.Mvc
 
         static LogRequestFormAttribute()
         {
+#if DEBUG
             Bus.Instance.AddMessageHandlerType(typeof(DebugLogRequestFormMessageObserver));
+#endif
         }
 
         /// <summary>

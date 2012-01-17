@@ -34,9 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Curiosity.Common, Version=1.7.59.0, Culture=neutral, PublicKeyToken=fdc25e90fcbc022c, processorArchitecture=MSIL">
+    <Reference Include="Curiosity.Common, Version=1.7.61.0, Culture=neutral, PublicKeyToken=fdc25e90fcbc022c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Curiosity.Common.1.7.59\lib\net40\Curiosity.Common.dll</HintPath>
+      <HintPath>..\packages\Curiosity.Common.1.7.61\lib\net40\Curiosity.Common.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -95,10 +95,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="Views\Home\TestForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Home\TestForm.cshtml" />
+    <Content Include="Views\Home\Flash.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

@@ -37,8 +37,9 @@
     <AssemblyOriginatorKeyFile>..\Curiosity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Curiosity.Common, Version=1.7.59.0, Culture=neutral, PublicKeyToken=fdc25e90fcbc022c, processorArchitecture=MSIL">
-      <HintPath>..\packages\Curiosity.Common.1.7.59\lib\net40\Curiosity.Common.dll</HintPath>
+    <Reference Include="Curiosity.Common, Version=1.7.61.0, Culture=neutral, PublicKeyToken=fdc25e90fcbc022c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Curiosity.Common.1.7.61\lib\net40\Curiosity.Common.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -54,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CollectionExtensions.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="DebugLogRequestFormMessageObserver.cs" />
     <Compile Include="DefaultFormHandlerFactory.cs" />
     <Compile Include="DependencyResolverFormHandlerFactory.cs" />

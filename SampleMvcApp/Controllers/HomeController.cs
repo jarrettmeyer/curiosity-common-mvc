@@ -1,12 +1,17 @@
 ﻿using System.Web.Mvc;
+using Curiosity.Common.Mvc;
 using SampleMvcApp.Models;
 
 namespace SampleMvcApp.Controllers
 {
     public class HomeController : Controller
     {
-        //
-        // GET: /Home/
+        public ActionResult Flash()
+        {
+            TempData.Flash(new { success = "This is a success message." });
+            TempData.Flash(new { error = "This is an error message."});
+            return View();
+        }
 
         public ActionResult Index()
         {

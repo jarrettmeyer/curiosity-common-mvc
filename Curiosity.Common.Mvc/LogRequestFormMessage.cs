@@ -8,7 +8,7 @@ using Curiosity.Common.Messaging;
 
 namespace Curiosity.Common.Mvc
 {
-    public class LogRequestFormMessage : EventMessageBase, IEnumerable<KeyValuePair<string, string>>
+    public class LogRequestFormMessage : MessageBase, IEnumerable<KeyValuePair<string, string>>
     {
         private readonly ControllerContext context;
         

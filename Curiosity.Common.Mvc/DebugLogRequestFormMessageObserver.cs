@@ -3,6 +3,7 @@ using Curiosity.Common.Messaging;
 
 namespace Curiosity.Common.Mvc
 {
+#if DEBUG
     /// <summary>
     /// As an observer, this will make no changes to the message. It will simply log
     /// the form data to the debug window. Useful for debugging.
@@ -20,4 +21,5 @@ namespace Curiosity.Common.Mvc
             }
         }
     }    
+#endif
 }
