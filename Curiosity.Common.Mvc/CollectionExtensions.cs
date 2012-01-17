@@ -10,6 +10,12 @@ namespace Curiosity.Common.Mvc
     /// </summary>
     public static class CollectionExtensions
     {
+        public static SelectList ToSelectList<T>(this IEnumerable<T> collection, string dataValueField, string dataTextField)
+        {
+            collection.ThrowIfArgumentIsNull("collection");
+            return new SelectList(collection, dataValueField, dataTextField);
+        }
+
         /// <summary>
         /// Cast the given collection to a collection of select list items.
         /// </summary>

@@ -75,7 +75,7 @@ namespace Curiosity.Common.Mvc
             var formType = form.GetType();
             foreach (var supportedType in GetFormHandlerTypeForFormType(formType))
             {
-                supportedType.Handle(form);
+                supportedType.Handle(form);                
             }
         }
 
@@ -114,8 +114,7 @@ namespace Curiosity.Common.Mvc
                 {
                     if (instance == null)
                     {
-                        var factory = new DependencyResolverFormHandlerFactory();
-                        instance = new FormHandlerBus(factory);
+                        CreateBusInstance();
                         AddAllFormHandlers();
                     }
                 }
@@ -129,6 +128,12 @@ namespace Curiosity.Common.Mvc
             {
                 Instance.AddFormHandlerType(formHandler);
             }
+        }
+
+        private static void CreateBusInstance()
+        {
+            var factory = new DependencyResolverFormHandlerFactory();
+            instance = new FormHandlerBus(factory);
         }
 
         private static IEnumerable<Type> FindAllFormHandlers()

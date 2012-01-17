@@ -92,6 +92,7 @@ namespace Curiosity.Common.Mvc
         {
             if (NotifyOnApplicationException)
             {
+                // ApplicationExceptions are written out as warnings.
                 WriteFlashWarning(context.Controller.TempData, exception.Message);
             }
             ExecuteFailureResult(context);
@@ -116,7 +117,7 @@ namespace Curiosity.Common.Mvc
         }
 
         private void HandleOnSuccess(ControllerContext context)
-        {
+        {            
             if (NotifyOnSuccess && SuccessNotification != null)
             {
                 WriteFlashSuccess(context.Controller.TempData, SuccessNotification());

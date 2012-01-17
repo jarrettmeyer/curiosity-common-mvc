@@ -17,7 +17,7 @@ namespace Curiosity.Common.Mvc
         [DebuggerStepThrough]
         public virtual bool CanHandle(Type type)
         {
-            return type != null && type.Equals(typeof(FORM));
+            return type != null && type == typeof(FORM);
         }
 
         /// <summary>
